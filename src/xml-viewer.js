@@ -210,9 +210,9 @@ function request(e) {
 const postXMLOnServer = (path) => {
   const status = document.getElementById('status');
   let exist, ok, valid;
-  xmlString != '' ? exist = true : exist = false;
-  status.innerHTML == 'OK' ? ok = true : ok = false;
-  path.includes('http') || path.includes('https') ? valid = true : valid = false;
+  exist = xmlString != '';
+  ok = status.innerHTML == 'OK';
+  valid = path.includes('http') || path.includes('https');
   if (exist && ok && valid) {
     fetch(path, {
       method: 'POST',
