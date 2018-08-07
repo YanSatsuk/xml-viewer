@@ -1,0 +1,17 @@
+.xml {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.xml-attribute {
+  color: rgb(255, 102, 46);
+}
+
+.xml-tag {
+  color: purple;
+}
+
+.xml-parent {
+  color: rgb(88, 0, 88);
+}
