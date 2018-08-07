@@ -66,10 +66,15 @@ panelDiv.style.width = divWidth;
 panelDiv.style.display = 'none';
 panelDiv.id = 'panel';
 
-const xmlA = document.createElement('a');
-xmlA.appendChild(document.createTextNode(xmlLinkText));
-xmlA.href = '#';
-xmlA.id = 'xml-link';
+const createLink = (linkText, id) => {
+  const link = document.createElement('a');
+  link.appendChild(document.createTextNode(linkText));
+  link.href = '#';
+  link.id = id;
+  return link;
+}
+
+const xmlA = createLink(xmlLinkText, 'xml-link');
 xmlA.addEventListener('click', () => {
   if (size) {
     xmlDiv.style.display = 'block';
@@ -78,10 +83,7 @@ xmlA.addEventListener('click', () => {
   }
 });
 
-const errorA = document.createElement('a');
-errorA.appendChild(document.createTextNode(errorLinkText));
-errorA.href = '#';
-errorA.id = 'error-link';
+const errorA = createLink(errorLinkText, 'error-link');
 errorA.addEventListener('click', () => {
   if (errors) {
     xmlDiv.style.display = 'none';
@@ -90,10 +92,7 @@ errorA.addEventListener('click', () => {
   }
 });
 
-const warningA = document.createElement('a');
-warningA.appendChild(document.createTextNode(warningLinkText));
-warningA.href = '#';
-warningA.id = 'warning-link';
+const warningA = createLink(warningLinkText, 'warning-link');
 warningA.addEventListener('click', () => {
   if (warnings) {
     xmlDiv.style.display = 'none';
@@ -114,36 +113,24 @@ panelDiv.appendChild(document.createElement('br'));
 panelDiv.appendChild(document.createTextNode('Status: '));
 panelDiv.appendChild(statusElement);
 
-const xmlDiv = document.createElement('div');
-xmlDiv.style.border = '2px solid blue';
-xmlDiv.style.margin = hCenter;
-xmlDiv.style.marginTop = marginTop;
-xmlDiv.style.marginBottom = '20px';
-xmlDiv.style.display = 'none';
-xmlDiv.style.padding = '5px';
-xmlDiv.className = 'xml';
-xmlDiv.id = 'xml-view';
+const createDivView = (color, id) => {
+  const div = document.createElement('div');
+  div.style.border = `2px solid ${color}`;
+  div.style.margin = hCenter;
+  div.style.marginTop = marginTop;
+  div.style.marginBottom = '20px';
+  div.style.display = 'none';
+  div.style.padding = '5px';
+  div.className = 'xml';
+  div.id = id;
+  return div;
+}
+
+const xmlDiv = createDivView('blue', 'xml-view');
 xmlDiv.addEventListener('click', collapseTag);
 
-const errorDiv = document.createElement('div');
-errorDiv.style.border = '2px solid red';
-errorDiv.style.margin = hCenter;
-errorDiv.style.marginTop = marginTop;
-errorDiv.style.marginBottom = '20px';
-errorDiv.style.display = 'none';
-errorDiv.style.padding = '5px';
-errorDiv.className = 'xml';
-errorDiv.id = 'error-view';
-
-const warningDiv = document.createElement('div');
-warningDiv.style.border = '2px solid yellow';
-warningDiv.style.margin = hCenter;
-warningDiv.style.marginTop = marginTop;
-warningDiv.style.marginBottom = '20px';
-warningDiv.style.display = 'none';
-warningDiv.style.padding = '5px';
-warningDiv.className = 'xml';
-warningDiv.id = 'warning-view';
+const errorDiv = createDivView('red', 'error-view');
+const warningDiv = createDivView('yellow', 'warning-view');
 
 mainDiv.appendChild(titleDiv);
 mainDiv.appendChild(formDiv);
@@ -266,15 +253,18 @@ const renderXMLInfo = (xml) => {
   xmlLink.innerHTML = `XML (${size} in bytes)`;
   xmlView.innerHTML = '';
   xmlView.style.display = 'block';
-  errorView.innerHTML = '';
-  errorView.style.display = 'none';
-  warningView.innerHTML = '';
-  warningView.style.display = 'none';
+  resetDiv(errorView);
+  resetDiv(warningDiv);
   const xmlinfo = document.createElement('div');
   xmlinfo.style.marginLeft = '10px';
   xmlinfo.innerHTML = `&lt?xml version="${xmlDoc.xmlVersion}" encoding="${xmlDoc.xmlEncoding}" ?&gt`;
   xmlView.appendChild(xmlinfo);
   renderXMLView(xmlDoc, xmlView);
+}
+
+const resetDiv = (div) => {
+  div.innerHTML = '';
+  div.style.display = 'none';
 }
 
 const renderXMLView = (xml, div) => {
