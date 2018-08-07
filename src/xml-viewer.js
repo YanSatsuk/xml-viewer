@@ -209,7 +209,11 @@ function request(e) {
 
 const postXMLOnServer = (path) => {
   const status = document.getElementById('status');
-  if (status.innerHTML == 'OK' && (path.includes('http') || path.includes('https'))) {
+  let exist, ok, valid;
+  xmlString != '' ? exist = true : exist = false;
+  status.innerHTML == 'OK' ? ok = true : ok = false;
+  path.includes('http') || path.includes('https') ? valid = true : valid = false;
+  if (exist && ok && valid) {
     fetch(path, {
       method: 'POST',
       headers: {
@@ -245,20 +249,7 @@ const getXMLfromServer = (path) => {
     }).then(xml => {
       if (xml !== null) {
         xmlString = xml;
-        const xmlDoc = new DOMParser().parseFromString(xml, 'text/xml');
-        size = new Blob([xml], { type: 'text/xml' }).size;
-        xmlLink.innerHTML = `XML (${size} in bytes)`;
-        xmlView.innerHTML = '';
-        xmlView.style.display = 'block';
-        errorView.innerHTML = '';
-        errorView.style.display = 'none';
-        warningView.innerHTML = '';
-        warningView.style.display = 'none';
-        const xmlinfo = document.createElement('div');
-        xmlinfo.style.marginLeft = '10px';
-        xmlinfo.innerHTML = `&lt?xml version="${xmlDoc.xmlVersion}" encoding="${xmlDoc.xmlEncoding}" ?&gt`;
-        xmlView.appendChild(xmlinfo);
-        renderXMLView(xmlDoc, xmlView);
+        renderXMLInfo(xml);
       }
     }).catch(error => {
       console.log(error);
@@ -267,6 +258,23 @@ const getXMLfromServer = (path) => {
   } else {
     status.innerHTML = 'BAD ADDRESS';
   }
+}
+
+const renderXMLInfo = (xml) => {
+  const xmlDoc = new DOMParser().parseFromString(xml, 'text/xml');
+  size = new Blob([xml], { type: 'text/xml' }).size;
+  xmlLink.innerHTML = `XML (${size} in bytes)`;
+  xmlView.innerHTML = '';
+  xmlView.style.display = 'block';
+  errorView.innerHTML = '';
+  errorView.style.display = 'none';
+  warningView.innerHTML = '';
+  warningView.style.display = 'none';
+  const xmlinfo = document.createElement('div');
+  xmlinfo.style.marginLeft = '10px';
+  xmlinfo.innerHTML = `&lt?xml version="${xmlDoc.xmlVersion}" encoding="${xmlDoc.xmlEncoding}" ?&gt`;
+  xmlView.appendChild(xmlinfo);
+  renderXMLView(xmlDoc, xmlView);
 }
 
 const renderXMLView = (xml, div) => {
