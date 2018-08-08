@@ -251,8 +251,7 @@ const renderXMLInfo = (xml) => {
   const xmlDoc = new DOMParser().parseFromString(xml, 'text/xml');
   size = new Blob([xml], { type: 'text/xml' }).size;
   xmlLink.innerHTML = `XML (${size} in bytes)`;
-  xmlView.innerHTML = '';
-  xmlView.style.display = 'block';
+  resetDiv(xmlView);
   resetDiv(errorView);
   resetDiv(warningDiv);
   const xmlinfo = document.createElement('div');
@@ -264,7 +263,11 @@ const renderXMLInfo = (xml) => {
 
 const resetDiv = (div) => {
   div.innerHTML = '';
-  div.style.display = 'none';
+  if (div.id == 'xml-view') {
+    div.style.display = 'block'
+  } else {
+    div.style.display = 'none';
+  }
 }
 
 const renderXMLView = (xml, div) => {
@@ -333,13 +336,11 @@ function collapseTag(event) {
   if (event.target.className == 'collapsible') {
     if (event.target.innerText == '+') {
       event.target.innerText = '-';
+      event.target.nextSibling.firstElementChild.nextSibling.style.display = 'block';
+
     } else {
       event.target.innerText = '+';
-    }
-    if (event.target.nextSibling.firstElementChild.nextSibling.style.display == 'block') {
       event.target.nextSibling.firstElementChild.nextSibling.style.display = 'none';
-    } else {
-      event.target.nextSibling.firstElementChild.nextSibling.style.display = 'block';
     }
   }
 }
