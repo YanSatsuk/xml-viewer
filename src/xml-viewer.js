@@ -215,18 +215,11 @@ const postXMLOnServer = (path) => {
 }
 
 const getXMLfromServer = (path) => {
-  const myInit = {
-    method: 'GET',
-    mode: 'cors',
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    }
-  };
   errors = 0;
   warnings = 0;
   panel.style.display = 'block';
   if (path.includes('http') || path.includes('https')) {
-    fetch(path, myInit).then(res => {
+    fetch(path).then(res => {
       if (res.status == 200) {
         const type = res.headers.get("content-type");
         if (type == 'application/xml' || type == 'text/xml') {
